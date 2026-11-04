@@ -2,7 +2,7 @@
 
 Aplicação web para preencher os quadros de confronto da página 2 da Folha de Contas (S-26) e gerar o PDF já preenchido.
 
-**Acesse:** https://andrellsantana.github.io/confrontoss26/
+**Acesse:** https://andrellsantana.github.io/confrontos-s26/
 
 Funciona no celular e no computador, sem instalação e sem cadastro. O PDF é processado no próprio aparelho e não é enviado para nenhum servidor.
 
