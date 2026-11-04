@@ -31,11 +31,11 @@ Origem: PDF impresso pelo Chrome (Skia), A4 retrato, 3 páginas, **sem campos de
 
 ## Página 3 – Resumo (somente leitura, para validação)
 Blocos ENTRADAS, CONTA, OUTRA CONTA (cada um: saldo anterior, entrada, saída, Total) e SALDO DISPONÍVEL.
-Exemplo set/2026: CONTA Total = 4.412,50; OUTRA CONTA Total = 7.321,35.
+Os valores esperados são lidos de cada PDF carregado.
 O mesmo valor também aparece no texto de instrução da página 2 ("deve ser igual a R$ …") – usado como conferência dupla.
 
 ## Achado importante: a posição muda entre PDFs
-O PDF em branco e o preenchido têm **escalas e quebras de linha diferentes** (ex.: rótulo "1." em y=115 num e y=142 no outro; quebras de texto distintas).
+O PDF em branco e o preenchido têm **escalas e quebras de linha diferentes**.
 Logo, coordenadas fixas não servem. A aplicação localizará as âncoras em cada PDF carregado:
 - linha de cada item: marcador "N." na coluna do quadro;
 - coluna dos valores: sinais "+" / "–" (valor alinhado à direita antes do sinal);
