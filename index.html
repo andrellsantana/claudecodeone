@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confrontos S-26</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--tx:#1d2330;--mut:#5d6575;--bd:#d8dce3;--ac:#2456c6;--ok:#16794a;--okbg:#e5f5ec;--er:#b3261e;--erbg:#fbe9e7;--calc:#eef2fa}
+@media (prefers-color-scheme:dark){:root{--bg:#14171c;--card:#1d2128;--tx:#e6e8ec;--mut:#9aa2b1;--bd:#333944;--ac:#7aa2ff;--ok:#5fd394;--okbg:#173326;--er:#ff8a80;--erbg:#3a1d1b;--calc:#232a38}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 Arial,"Liberation Sans",Helvetica,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:4px 0 12px}
+h2{font-size:16px;margin:0 0 4px}
+.sub{color:var(--mut);font-size:13px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.row{display:grid;grid-template-columns:1fr 130px;gap:8px;align-items:center;padding:5px 0;border-top:1px solid var(--bd)}
+.row:first-of-type{border-top:0}
+.row label{font-size:14px}
+.n{font-weight:bold;margin-right:4px}
+input{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:7px 8px;width:100%}
+input.money{text-align:right}
+input:focus{outline:2px solid var(--ac);outline-offset:0}
+.calc{background:var(--calc);border:1px solid var(--bd);border-radius:6px;padding:7px 8px;text-align:right;font-weight:bold}
+.list{padding:6px 0 4px}
+.list .hd,.list .li{display:grid;grid-template-columns:1fr 130px;gap:8px;margin-bottom:5px}
+.list .hd{font-size:12px;color:var(--mut)}
+.chk{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:13px}
+.chk.ok{background:var(--okbg);color:var(--ok)}
+.chk.er{background:var(--erbg);color:var(--er)}
+.chk.mut{color:var(--mut);border:1px dashed var(--bd)}
+.status{font-size:14px;margin-top:10px}
+.status.ok{color:var(--ok)} .status.er{color:var(--er)}
+.drop{display:block;border:2px dashed var(--bd);border-radius:10px;padding:18px;text-align:center;cursor:pointer}
+.drop:hover{border-color:var(--ac)}
+.drop input{display:none}
+button{font:inherit;font-weight:bold;border:0;border-radius:8px;padding:12px 18px;background:var(--ac);color:#fff;cursor:pointer}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.sec{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+<main>
+<h1>Confrontos do S-26</h1>
+<p class="sub">Preencha os quadros da página 2 e gere o PDF. Nada é enviado pela internet: tudo é processado no seu aparelho.</p>
+
+<section class="card">
+  <h2>1. Carregar o S-26 (PDF)</h2>
+  <label class="drop"><input type="file" id="file" accept="application/pdf"><span id="fileLbl">Toque ou clique para escolher o PDF do S-26</span></label>
+  <div id="pdfStatus" class="status"></div>
+</section>
+
+<div class="grid">
+<section class="card" id="q1">
+  <h2>Confronto: conta bancária</h2>
+  <div class="row"><label for="q1_data">Data do preenchimento</label><input id="q1_data" class="date" inputmode="numeric" placeholder="dd/mm/aaaa"></div>
+  <div class="row"><label><span class="n">1.</span>Saldo final do extrato bancário</label><input class="money" id="q1_1" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">2.</span>Depósitos não no extrato (+)</label><input class="money" id="q1_2" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">3.</span>Taxas bancárias não registradas (+)</label><input class="money" id="q1_3" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">4.</span>Total dos itens 1 a 3</label><div class="calc" id="q1_4">0,00</div></div>
+  <div class="row" style="grid-template-columns:1fr"><label><span class="n">5.</span>Transferências/cheques ainda não processados</label></div>
+  <div class="list" id="q1_5"><div class="hd"><span>N.º de confirmação/N.º do cheque</span><span style="text-align:right">Valor</span></div></div>
+  <div class="row"><label><span class="n">6.</span>Total do item 5 (–)</label><div class="calc" id="q1_6">0,00</div></div>
+  <div class="row"><label><span class="n">7.</span>Juros bancários não registrados (–)</label><input class="money" id="q1_7" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">8.</span>Donativos eletrônicos não registrados</label><input class="money" id="q1_8" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">9.</span>Saldo após confronto</label><div class="calc" id="q1_9">0,00</div></div>
+  <div class="chk mut" id="q1_chk">Carregue o PDF para conferir com o Resumo.</div>
+</section>
+
+<section class="card" id="q2">
+  <h2>Confronto: outra conta (fundos em Betel)</h2>
+  <div class="row"><label for="q2_data">Data do preenchimento</label><input id="q2_data" class="date" inputmode="numeric" placeholder="dd/mm/aaaa"></div>
+  <div class="row"><label><span class="n">1.</span>Saldo final do extrato</label><input class="money" id="q2_1" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">2.</span>Depósitos não no extrato (+)</label><input class="money" id="q2_2" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">3.</span>Taxas não registradas (+)</label><input class="money" id="q2_3" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">4.</span>Total dos itens 1 a 3</label><div class="calc" id="q2_4">0,00</div></div>
+  <div class="row" style="grid-template-columns:1fr"><label><span class="n">5.</span>Saques não registrados no extrato</label></div>
+  <div class="list" id="q2_5"><div class="hd"><span>Descrição</span><span style="text-align:right">Valor</span></div></div>
+  <div class="row"><label><span class="n">6.</span>Total do item 5 (–)</label><div class="calc" id="q2_6">0,00</div></div>
+  <div class="row"><label><span class="n">7.</span>Juros não registrados (–)</label><input class="money" id="q2_7" inputmode="numeric"></div>
+  <div class="row"><label><span class="n">8.</span>Saldo após confronto</label><div class="calc" id="q2_8">0,00</div></div>
+  <div class="chk mut" id="q2_chk">Carregue o PDF para conferir com o Resumo.</div>
+</section>
+</div>
+
+<section class="card">
+  <div class="actions">
+    <button id="gen" disabled>Gerar PDF preenchido</button>
+    <button id="share" class="sec" hidden>Compartilhar</button>
+    <span id="genMsg" class="sub" style="margin:0"></span>
+  </div>
+</section>
+</main>
+
+<script src="vendor/pdf.min.js"></script>
+<script src="vendor/pdf-lib.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'vendor/pdf.worker.min.js';
+const ROWS = 7;
+const $ = id => document.getElementById(id);
+
+/* ---------- Formatação pt-BR ---------- */
+const fmt = c => { const neg = c < 0; c = Math.abs(c);
+  const s = String(Math.floor(c / 100)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return (neg ? '-' : '') + s + ',' + String(c % 100).padStart(2, '0'); };
+const parseMoney = s => { const m = String(s).trim().match(/^-?\d{1,3}(\.\d{3})*,\d{2}$|^-?\d+,\d{2}$/); if (!m) return null;
+  return Math.round(parseFloat(s.replace(/\./g, '').replace(',', '.')) * 100); };
+const cents = el => { const d = el.value.replace(/\D/g, ''); return d ? parseInt(d, 10) : 0; };
+function maskMoney(e) { const d = e.target.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 11);
+  e.target.value = d ? fmt(parseInt(d, 10)) : ''; recalc(); }
+function maskDate(e) { const d = e.target.value.replace(/\D/g, '').slice(0, 8);
+  e.target.value = d.length > 4 ? `${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4)}` : d.length > 2 ? `${d.slice(0,2)}/${d.slice(2)}` : d; recalc(); }
+const validDate = s => { const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/); if (!m) return false;
+  const dt = new Date(+m[3], m[2] - 1, +m[1]); return dt.getDate() == +m[1] && dt.getMonth() == m[2] - 1; };
+
+/* ---------- Montagem do formulário ---------- */
+for (const q of ['q1', 'q2']) {
+  const box = $(q + '_5');
+  for (let i = 0; i < ROWS; i++) {
+    const li = document.createElement('div'); li.className = 'li';
+    li.innerHTML = `<input class="desc" maxlength="40" placeholder="${q === 'q1' ? 'N.º' : 'Descrição'} ${i + 1}"><input class="money" inputmode="numeric">`;
+    box.appendChild(li);
+  }
+}
+document.querySelectorAll('input.money').forEach(i => i.addEventListener('input', maskMoney));
+document.querySelectorAll('input.date').forEach(i => i.addEventListener('input', maskDate));
+document.querySelectorAll('input.desc').forEach(i => i.addEventListener('input', recalc));
+const hoje = new Date(); const hojeStr = `${String(hoje.getDate()).padStart(2,'0')}/${String(hoje.getMonth()+1).padStart(2,'0')}/${hoje.getFullYear()}`;
+$('q1_data').value = $('q2_data').value = hojeStr;
+
+/* ---------- Cálculo ---------- */
+let pdfInfo = null;       // resultado da análise do PDF
+let state = {};
+function readList(q) { return [...$(q + '_5').querySelectorAll('.li')].map(li => {
+  const [d, v] = li.querySelectorAll('input'); return { desc: d.value.trim(), val: cents(v), has: d.value.trim() !== '' || v.value !== '' }; }); }
+function recalc() {
+  const v = id => cents($(id));
+  const s = {};
+  s.q1 = { data: $('q1_data').value, i1: v('q1_1'), i2: v('q1_2'), i3: v('q1_3'), i7: v('q1_7'), i8: v('q1_8'), list: readList('q1') };
+  s.q1.i4 = s.q1.i1 + s.q1.i2 + s.q1.i3;
+  s.q1.i6 = s.q1.list.reduce((a, r) => a + r.val, 0);
+  s.q1.i9 = s.q1.i4 - s.q1.i6 - s.q1.i7 - s.q1.i8;
+  s.q2 = { data: $('q2_data').value, i1: v('q2_1'), i2: v('q2_2'), i3: v('q2_3'), i7: v('q2_7'), list: readList('q2') };
+  s.q2.i4 = s.q2.i1 + s.q2.i2 + s.q2.i3;
+  s.q2.i6 = s.q2.list.reduce((a, r) => a + r.val, 0);
+  s.q2.i8 = s.q2.i4 - s.q2.i6 - s.q2.i7;
+  for (const k of ['q1_4', 'q1_6', 'q1_9', 'q2_4', 'q2_6', 'q2_8']) { const [q, i] = k.split('_'); $(k).textContent = fmt(s[q]['i' + i]); }
+  state = s;
+  validate();
+}
+function check(el, got, want, rotulo) {
+  if (want == null) { el.className = 'chk mut'; el.textContent = 'Carregue o PDF para conferir com o Resumo.'; return false; }
+  if (got === want) { el.className = 'chk ok'; el.textContent = `✔ Confere com o Resumo (${rotulo}: ${fmt(want)}).`; return true; }
+  el.className = 'chk er'; el.textContent = `✖ Não confere. Esperado ${fmt(want)} (${rotulo}). Diferença: ${fmt(got - want)}.`; return false;
+}
+function validate() {
+  const ok1 = check($('q1_chk'), state.q1.i9, pdfInfo && pdfInfo.ok ? pdfInfo.totConta : null, 'Conta bancária/cofre');
+  const ok2 = check($('q2_chk'), state.q2.i8, pdfInfo && pdfInfo.ok ? pdfInfo.totOutra : null, 'Outra');
+  const datas = validDate(state.q1.data) && validDate(state.q2.data);
+  const listaOk = ['q1', 'q2'].every(q => state[q].list.every(r => !r.has || (r.desc && r.val)));
+  $('gen').disabled = !(ok1 && ok2 && datas && listaOk);
+  $('genMsg').textContent = !pdfInfo || !pdfInfo.ok ? '' : !datas ? 'Informe datas válidas (dd/mm/aaaa).'
+    : !listaOk ? 'No item 5, cada linha usada precisa de descrição/N.º e valor.' : !(ok1 && ok2) ? 'Os saldos precisam conferir com o Resumo.' : 'Tudo certo.';
+}
+
+/* ---------- Leitura e análise do PDF ---------- */
+let pdfBytes = null, fileName = 's26.pdf';
+$('file').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  fileName = f.name; $('fileLbl').textContent = f.name;
+  const st = $('pdfStatus'); st.className = 'status'; st.textContent = 'Lendo o PDF…';
+  pdfInfo = null; $('share').hidden = true;
+  try {
+    pdfBytes = new Uint8Array(await f.arrayBuffer());
+    pdfInfo = await analisar(pdfBytes.slice());
+    if (pdfInfo.ok) { st.className = 'status ok';
+      st.textContent = `✔ S-26 reconhecido${pdfInfo.mes ? ' (' + pdfInfo.mes + ')' : ''}. Resumo: Conta ${fmt(pdfInfo.totConta)} · Outra ${fmt(pdfInfo.totOutra)}.`; }
+    else { st.className = 'status er'; st.textContent = '✖ ' + pdfInfo.erro; }
+  } catch (err) { console.error(err); pdfInfo = { ok: false }; st.className = 'status er'; st.textContent = '✖ Não foi possível ler este PDF.'; }
+  recalc();
+});
+
+async function linhasDaPagina(page) {
+  const tc = await page.getTextContent();
+  const items = tc.items.filter(it => it.str && it.str.trim()).map(it => ({
+    str: it.str, x: it.transform[4], y: it.transform[5], w: it.width, fs: Math.hypot(it.transform[2], it.transform[3]) || it.height }));
+  return items;
+}
+function agruparLinhas(items) {
+  const s = [...items].sort((a, b) => b.y - a.y || a.x - b.x), lines = [];
+  for (const it of s) { const l = lines.find(l => Math.abs(l.y - it.y) < it.fs * 0.3);
+    if (l) l.items.push(it); else lines.push({ y: it.y, items: [it] }); }
+  for (const l of lines) { l.items.sort((a, b) => a.x - b.x); l.text = l.items.map(i => i.str.trim()).join(' '); l.fs = Math.max(...l.items.map(i => i.fs)); }
+  return lines.sort((a, b) => b.y - a.y);
+}
+const MONEY = /^\d{1,3}(\.\d{3})*,\d{2}$/, DATE = /^\d{2}\/\d{2}\/\d{4}$/, SIGN = /^[+\-–−]$/;
+
+async function analisar(bytes) {
+  const doc = await pdfjsLib.getDocument({ data: bytes }).promise;
+  if (doc.numPages < 3) return { ok: false, erro: 'O PDF precisa ter 3 páginas (S-26).' };
+  const p2 = await doc.getPage(2), p3 = await doc.getPage(3);
+  const it2 = await linhasDaPagina(p2), it3 = await linhasDaPagina(p3);
+  const txt2 = it2.map(i => i.str).join(' '), txt3 = it3.map(i => i.str).join(' ');
+  if (!/S-26/.test(txt2) || !/CONFRONTO/.test(txt2) || !/RESUMO/i.test(txt3)) return { ok: false, erro: 'Este PDF não parece ser um S-26.' };
+
+  // Resumo (página 3)
+  const l3 = agruparLinhas(it3);
+  const totalApos = nome => { const i = l3.findIndex(l => l.text.trim().toUpperCase() === nome); if (i < 0) return null;
+    for (let j = i + 1; j < l3.length; j++) if (/^Total\b/i.test(l3[j].text)) { const t = l3[j].text.split(/\s+/).reverse().find(x => MONEY.test(x)); return t ? parseMoney(t) : null; }
+    return null; };
+  const totConta = totalApos('CONTA'), totOutra = totalApos('OUTRA CONTA');
+  if (totConta == null || totOutra == null) return { ok: false, erro: 'Não encontrei os totais "Conta" e "Outra conta" no Resumo (página 3).' };
+  const mesM = txt3.match(/TERMINA EM:\s*([^\n]*?\d{4})/i);
+
+  // Página 2: já preenchida?
+  const preenchido = it2.some(i => i.str.trim().split(/\s+/).some(t => MONEY.test(t) || DATE.test(t)));
+  if (preenchido) return { ok: false, erro: 'Os quadros da página 2 já estão preenchidos. Carregue um S-26 com os quadros de confronto em branco.' };
+
+  const [vb] = p2.view.slice(2);  // largura da página
+  const meio = (p2.view[0] + p2.view[2]) / 2;
+  const layout = {};
+  try {
+    traços = await extrairTraços(p2);
+    layout.q1 = mapearQuadro(it2.filter(i => i.x < meio), 9);
+    layout.q2 = mapearQuadro(it2.filter(i => i.x >= meio), 8);
+  } catch (e) { return { ok: false, erro: 'Não consegui localizar as linhas dos quadros: ' + e.message }; }
+  return { ok: true, totConta, totOutra, mes: mesM ? mesM[1].trim().toLowerCase() : '', layout };
+}
+
+// Localiza cada item do quadro a partir dos próprios textos do PDF
+function mapearQuadro(items, ultimo) {
+  const lines = agruparLinhas(items);
+  // marcadores "N." na margem esquerda do quadro
+  const marks = [];
+  for (const l of lines) { const f = l.items[0]; const m = f.str.trim().match(/^([1-9])\.(\s|$)/);
+    if (m) marks.push({ n: +m[1], line: l, x: f.x }); }
+  const xMin = Math.min(...marks.map(m => m.x));
+  const M = {}; for (const m of marks) if (Math.abs(m.x - xMin) < 3 && !M[m.n]) M[m.n] = m;
+  for (let n = 1; n <= ultimo; n++) if (!M[n]) throw new Error('item ' + n + ' não encontrado');
+  const fs = M[1].line.items[0].fs;
+  // sinais + / –
+  const signs = items.filter(i => SIGN.test(i.str.trim()));
+  if (!signs.length) throw new Error('coluna de valores não encontrada');
+  const signX = Math.min(...signs.map(s => s.x));
+  const right = signX - fs * 0.35;
+  const regiao = n => { const top = M[n].line.y; const bot = n < ultimo ? M[n + 1].line.y : -1e9;
+    return lines.filter(l => l.y <= top + 0.1 && l.y > bot + 0.1); };
+  const pos = {};
+  for (let n = 1; n <= ultimo; n++) {
+    if (n === 5) continue;
+    // valor na mesma linha de base da última linha do rótulo (a que termina em ":")
+    const comDoisPontos = regiao(n).filter(l => /:\s*$/.test(l.items.filter(i => !SIGN.test(i.str.trim())).map(i => i.str.trim()).join(' ')));
+    pos[n] = { y: (comDoisPontos.pop() || M[n].line).y, right };
+  }
+  // Data do preenchimento
+  const dl = lines.find(l => /preenchimento:/.test(l.text));
+  if (!dl) throw new Error('data do preenchimento não encontrada');
+  const di = dl.items.find(i => /preenchimento:/.test(i.str));
+  const k = di.str.indexOf('preenchimento:') + 'preenchimento:'.length;
+  const fim = di.x + di.w * (larg(di.str.slice(0, k)) / larg(di.str));
+  const sobra = di.str.slice(k).match(/^_+/);
+  pos.data = { y: dl.y, x: fim + fs * 0.4, fimLinha: sobra ? di.x + di.w : null, inicioLinha: fim };
+  // Tabela do item 5
+  const r5 = regiao(5);
+  const hv = r5.find(l => l.items.some(i => /\bValor\b/.test(i.str)));
+  if (!hv) throw new Error('tabela do item 5 não encontrada');
+  const vi = hv.items.find(i => /\bValor\b/.test(i.str));
+  const kv = vi.str.indexOf('Valor');
+  const valorRight = vi.x + vi.w * (larg(vi.str.slice(0, kv + 5)) / larg(vi.str));
+  const descX = hv.items[0] === vi ? M[5].line.items[0].x : hv.items[0].x;
+  const ultimaCab = r5[r5.length - 1].y;
+  const topoProx = M[6].line.y + fs;
+  // linhas desenhadas da tabela (sublinhados) entre o cabeçalho e o item 6
+  const hs = traços.filter(t => t.y < ultimaCab && t.y > M[6].line.y && t.x0 >= xMin - fs && t.x1 <= right + fs * 3);
+  const ys = [...new Set(hs.map(t => Math.round(t.y * 2) / 2))].sort((a, b) => b - a);
+  if (ys.length >= ROWS) {
+    const naLinha = hs.filter(t => Math.abs(t.y - ys[0]) < 0.6).sort((a, b) => a.x0 - b.x0);
+    const esq = naLinha[0], dirT = naLinha[naLinha.length - 1];
+    const dx = fs * 0.25;
+    pos.lista = { x: esq.x0 + dx, right: dirT.x1 - dx, ys: ys.slice(0, ROWS).map(y => y + fs * 0.3),
+      maxDesc: (naLinha.length > 1 ? esq.x1 - esq.x0 : dirT.x1 - dirT.x0 - larg('000.000,00', fs) - fs) - 2 * dx };
+  } else {
+    const passo = Math.min((ultimaCab - fs * 0.4 - topoProx) / ROWS, fs * 2);
+    pos.lista = { x: descX, right: valorRight, ys: [...Array(ROWS)].map((_, i) => ultimaCab - passo * (i + 1)),
+      maxDesc: valorRight - larg('000.000,00', fs) - fs - descX };
+  }
+  return { fs, pos };
+}
+
+// Extrai segmentos horizontais (sublinhados) desenhados na página
+async function extrairTraços(page) {
+  const { fnArray, argsArray } = await page.getOperatorList();
+  const O = pdfjsLib.OPS, out = [], pilha = [];
+  let m = [1, 0, 0, 1, 0, 0];
+  const mul = (a, b) => [a[0]*b[0]+a[2]*b[1], a[1]*b[0]+a[3]*b[1], a[0]*b[2]+a[2]*b[3], a[1]*b[2]+a[3]*b[3], a[0]*b[4]+a[2]*b[5]+a[4], a[1]*b[4]+a[3]*b[5]+a[5]];
+  const ap = (x, y) => [m[0]*x + m[2]*y + m[4], m[1]*x + m[3]*y + m[5]];
+  const add = pts => { if (pts.length < 2) return;
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+    const w = Math.max(...xs) - Math.min(...xs), h = Math.max(...ys) - Math.min(...ys);
+    if (w > 20 && h < 1.5) out.push({ x0: Math.min(...xs), x1: Math.max(...xs), y: (Math.max(...ys) + Math.min(...ys)) / 2 }); };
+  for (let i = 0; i < fnArray.length; i++) {
+    const fn = fnArray[i], a = argsArray[i];
+    if (fn === O.save) pilha.push(m);
+    else if (fn === O.restore) m = pilha.pop() || m;
+    else if (fn === O.transform) m = mul(m, a);
+    else if (fn === O.paintFormXObjectBegin) { pilha.push(m); if (a[0]) m = mul(m, a[0]); }
+    else if (fn === O.paintFormXObjectEnd) m = pilha.pop() || m;
+    else if (fn === O.constructPath) {
+      const [ops, c] = a; let k = 0, sub = [];
+      for (const op of ops) {
+        if (op === O.moveTo) { add(sub); sub = [ap(c[k], c[k + 1])]; k += 2; }
+        else if (op === O.lineTo) { sub.push(ap(c[k], c[k + 1])); k += 2; }
+        else if (op === O.curveTo) { sub.push(ap(c[k + 4], c[k + 5])); k += 6; }
+        else if (op === O.curveTo2 || op === O.curveTo3) { sub.push(ap(c[k + 2], c[k + 3])); k += 4; }
+        else if (op === O.rectangle) { add(sub); const [x, y, w, h] = c.slice(k, k + 4); add([ap(x, y), ap(x + w, y), ap(x + w, y + h), ap(x, y + h)]); sub = []; k += 4; }
+        else if (op === O.closePath) { add(sub); sub = []; }
+      }
+      add(sub);
+    }
+  }
+  return out;
+}
+let traços = [];
+// largura aproximada (Helvetica = métrica idêntica à Arial)
+let helv = null;
+const larg = (s, size = 1000) => helv ? helv.widthOfTextAtSize(s, size) : s.length * size * 0.5;
+(async () => { const d = await PDFLib.PDFDocument.create(); helv = await d.embedFont(PDFLib.StandardFonts.Helvetica); })();
+
+/* ---------- Geração do PDF ---------- */
+let ultimoPdf = null;
+$('gen').addEventListener('click', async () => {
+  $('gen').disabled = true; $('genMsg').textContent = 'Gerando…';
+  try {
+    const doc = await PDFLib.PDFDocument.load(pdfBytes);
+    const font = await doc.embedFont(PDFLib.StandardFonts.Helvetica);
+    const page = doc.getPage(1);
+    const cor = PDFLib.rgb(0.149, 0.149, 0.149);
+    const esc = s => [...s].filter(ch => { try { font.encodeText(ch); return true; } catch { return false; } }).join('');
+    for (const q of ['q1', 'q2']) {
+      const { fs, pos } = pdfInfo.layout[q], s = state[q];
+      const dir = (txt, p) => page.drawText(txt, { x: p.right - font.widthOfTextAtSize(txt, fs), y: p.y, size: fs, font, color: cor });
+      // data
+      let dx = pos.data.x;
+      if (pos.data.fimLinha) dx = (pos.data.inicioLinha + pos.data.fimLinha - font.widthOfTextAtSize(s.data, fs)) / 2;
+      page.drawText(s.data, { x: dx, y: pos.data.y, size: fs, font, color: cor });
+      const itens = q === 'q1' ? [1, 2, 3, 4, 6, 7, 8, 9] : [1, 2, 3, 4, 6, 7, 8];
+      for (const n of itens) dir(fmt(s['i' + n]), pos[n]);
+      // lista do item 5
+      s.list.filter(r => r.has).forEach((r, i) => {
+        const y = pos.lista.ys[i];
+        let d = esc(r.desc); while (d && font.widthOfTextAtSize(d, fs) > pos.lista.maxDesc) d = d.slice(0, -1);
+        page.drawText(d, { x: pos.lista.x, y, size: fs, font, color: cor });
+        dir(fmt(r.val), { right: pos.lista.right, y });
+      });
+    }
+    const out = await doc.save();
+    const nome = fileName.replace(/\.pdf$/i, '') + '-confrontos.pdf';
+    ultimoPdf = new File([out], nome, { type: 'application/pdf' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(ultimoPdf); a.download = nome; document.body.appendChild(a); a.click(); a.remove();
+    $('genMsg').textContent = '✔ PDF gerado: ' + nome;
+    $('share').hidden = !(navigator.canShare && navigator.canShare({ files: [ultimoPdf] }));
+  } catch (err) { console.error(err); $('genMsg').textContent = '✖ Erro ao gerar o PDF.'; }
+  $('gen').disabled = false;
+});
+$('share').addEventListener('click', () => ultimoPdf && navigator.share({ files: [ultimoPdf], title: ultimoPdf.name }).catch(() => {}));
+
+recalc();
+</script>
+</body>
+</html>
